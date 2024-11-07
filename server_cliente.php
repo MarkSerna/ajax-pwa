@@ -54,7 +54,11 @@ try {
                 echo json_encode($clientes);
             }
             break;
-
+            case 'countActiveClients':
+                $stmt = $pdo->query("SELECT COUNT(DISTINCT c.id_cliente) as count FROM clientes c JOIN facturas f ON c.id_cliente = f.id_cliente");
+                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                echo json_encode($result);
+                break;
         default:
             echo json_encode(['success' => false, 'message' => 'Acción no válida.']);
             break;

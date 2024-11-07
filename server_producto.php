@@ -54,6 +54,11 @@ try {
                 echo json_encode($productos);
             }
             break;
+            case 'countProducts':
+                $stmt = $pdo->query("SELECT COUNT(*) as count FROM productos");
+                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                echo json_encode($result);
+                break;
 
         default:
             echo json_encode(['success' => false, 'message' => 'Acción no válida.']);

@@ -73,6 +73,11 @@ try {
                 echo json_encode($facturas);
             }
             break;
+            case 'countInvoices':
+                $stmt = $pdo->query("SELECT COUNT(*) as count FROM facturas");
+                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                echo json_encode($result);
+                break;
 
         default:
             echo json_encode(['success' => false, 'message' => 'Acción no válida.']);
