@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>usuario</title>
+    <link href="css/tailwind.min.css" rel="stylesheet">
+    <link href="css/style_usuario.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+
+    <header class="bg-indigo-600 p-4 shadow-md flex items-center justify-between relative">
+        <div class="relative">
+            <button id="sidebarButton" class="flex items-center justify-center p-2 text-white bg-indigo-600 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+        
+            <div id="sidebarContent" class="fixed inset-y-0 left-0 w-64 bg-white shadow-lg z-10 transform -translate-x-full transition-transform duration-300">
+                <div class="p-4 flex items-center justify-between">
+                    <a href="index.html" class="text-2xl font-semibold text-gray-700 hover:text-indigo-600">APK Software</a>
+                </div>
+                <button id="closeSidebarButton" class="absolute top-1/2 -right-3 transform -translate-y-1/2 focus:outline-none bg-white rounded-full p-1 shadow-lg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+                <nav class="mt-4">
+                    <a href="index.html" class="block px-4 py-2 text-gray-800 hover:bg-indigo-600 hover:text-white">Inicio</a>
+                    <a href="usuario.html" class="block px-4 py-2 text-gray-800 hover:bg-indigo-600 hover:text-white">Usuarios</a>
+                    <a href="cliente.html" class="block px-4 py-2 text-gray-800 hover:bg-indigo-600 hover:text-white">Clientes</a>
+                    <a href="factura.html" class="block px-4 py-2 text-gray-800 hover:bg-indigo-600 hover:text-white">Factura</a>
+                    <a href="productos.html" class="block px-4 py-2 text-gray-800 hover:bg-indigo-600 hover:text-white">Productos</a>
+                    <a href="detalle_factura.html" class="block px-4 py-2 text-gray-800 hover:bg-indigo-600 hover:text-white">Detalle factura</a>
+                    <a href="permisos.html" class="block px-4 py-2 text-gray-800 hover:bg-indigo-600 hover:text-white">Permisos usuario</a>
+                </nav>
+            </div>
+        </div>
+        <h1 class="text-white text-3xl font-bold">Usuarios</h1>
+    </header>
+
+    <button id="openModal" class="fixed bottom-9 right-5 bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 focus:outline-none" aria-label="Abrir formulario">
+        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2C11.4477 2 11 2.44772 11 3V11H3C2.44772 11 2 11.4477 2 12C2 12.5523 2.44772 13 3 13H11V21C11 21.5523 11.4477 22 12 22C12.5523 22 13 21.5523 13 21V13H21C21.5523 13 22  12.5523 22 12C22 11.4477 21.5523 11 21 11H13V3C13 2.44772 12.5523 2 12 2Z" />
+        </svg>
+    </button>
+
+    <div id="modal" class="inset-0 flex items-center justify-center hidden modal">
+        <div class="bg-white rounded-lg shadow-lg p-6 w-96 relative">
+            <h2 class="text-lg font-semibold mb-4">Crear o editar</h2>
+            <form id="dataForm" class="space-y-6">
+                <input type="hidden" id="id" name="id">
+                <div>
+                    <label for="nombre" class="block text-lg font-medium">Nombre</label>
+                    <input type="text" id="nombre" name="nombre" placeholder="Nombre" required class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label for="email" class="block text-lg font-medium">E-mail</label>
+                    <input type="email" id="email" name="email" placeholder="E-mail" required class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label for="telefono" class="block text-lg font-medium">Teléfono</label>
+                    <input type="tel" id="telefono" name="telefono" placeholder="Teléfono" required class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label for="contrasenia" class="block text-lg font-medium">Contraseña</label>
+                    <input type="password" id="contrasenia" name="contrasenia" placeholder="Contraseña" required class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div class="flex space-x-2">
+                    <button type="submit" class="w-1/2 py-2 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 flex items-center justify-center" aria-label="Guardar usuario">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h11l3 3v13a2 2 0 0 1-2 2zM14 2H8a2 2 0 0 0-2 2v2h10V4a2 2 0 0 0-2-2z" />
+                        </svg>
+                        Guardar
+                    </button>
+                    <button id="closeModal" type="button" class="w-1/2 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 flex items-center justify-center">
+                        Cerrar
+                    </button>
+                </div>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Contenedor de tarjetas de usuarios -->
+    <main id="mainContent" class="container mx-auto my-10 px-4">
+        <div id="dataList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </main>
+
+    <!-- Modal de Éxito -->
+    <div id="modalExito" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <h2 id="mensajeExito" class="text-lg font-semibold"></h2>
+        </div>
+    </div>
+
+    <!-- Modal de Result ado de Edición -->
+    <div id="modalEdicion" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <h2 id="mensajeEdicion" class="text-lg font-semibold"></h2>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación eliminar -->
+    <div id="modalEliminar" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-lg font-semibold mb-4">¿Estás seguro de que deseas eliminar este usuario?</h2>
+            <div class="flex justify-end">
+                <button id="btnEliminar" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600" aria-label="Eliminar usuario">Eliminar</button>
+                <button id="btnCancelar" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 ml-2" aria-label="Cancelar eliminación">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pie de Página -->
+    <footer class="bg-indigo-600 text-white text-left p-2 fixed bottom-0 w-full text-sm md:text-base">
+        <p>&copy; 2024 Sistema de Gestión. Marco Eduar Serna López.</p>
+    </footer>
+
+    <script src="js/app_usuario.js"></script>
+    <script src="js/script.js"></script>
+</body>
+
+</html>
