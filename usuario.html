@@ -22,8 +22,8 @@
             <div id="sidebarContent" class="fixed inset-y-0 left-0 w-64 bg-white shadow-lg z-10 transform -translate-x-full transition-transform duration-300">
                 <div class="p-4 flex items-center justify-between">
                     <a href="index.html" class="text-2xl font-semibold text-gray-700 hover:text-indigo-600">
-                        <img src="img/logo.png" alt="Logo" class="h-8 inline-block mr-2">
-                        Mark Soft
+                        <img src="img/logo.png" alt="Logo" class="h-10 inline-block mr-2">
+                        POS Soft
                     </a>
                 </div>
                 <button id="closeSidebarButton" class="absolute top-1/2 -right-3 transform -translate-y-1/2 focus:outline-none bg-white rounded-full p-1 shadow-lg">
@@ -41,14 +41,18 @@
                 </nav>
             </div>
         </div>
-        <h1 class="text-white text-3xl font-bold">Usuarios</h1>
+        <div class="flex items-center">
+            <img src="img/main.png" alt="Main Logo" class="h-10 mr-2">
+            <h1 class="text-white text-3xl font-bold">Usuarios</h1>
+        </div>
+        <div class="w-10"></div>
     </header>
 
-    <button id="openModal" class="fixed bottom-9 right-5 bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 focus:outline-none" aria-label="Abrir formulario">
-        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2C11.4477 2 11 2.44772 11 3V11H3C2.44772 11 2 11.4477 2 12C2 12.5523 2.44772 13 3 13H11V21C11 21.5523 11.4477 22 12 22C12.5523 22 13 21.5523 13 21V13H21C21.5523 13 22  12.5523 22 12C22 11.4477 21.5523 11 21 11H13V3C13 2.44772 12.5523 2 12 2Z" />
-        </svg>
-    </button>
+    <main class="container mx-auto px-4 py-4">
+        <button id="openModal" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 mb-6">
+            Nuevo Usuario
+        </button>
+    </main>
 
     <div id="modal" class="inset-0 flex items-center justify-center hidden modal">
         <div class="bg-white rounded-lg shadow-lg p-6 w-96 relative">

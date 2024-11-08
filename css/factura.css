@@ -1,37 +1,82 @@
+/* Estilos para la visualización normal */
+.receipt {
+  font-family: 'Courier New', Courier, monospace;
+  width: 300px;
+  margin: 0 auto;
+  padding: 10px;
+  border: 1px solid #000;
+}
+
+.receipt-header,
+.receipt-details {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.receipt-items,
+.receipt-total,
+.receipt-payment,
+.receipt-footer {
+  margin-bottom: 10px;
+}
+
+.receipt-header h1 {
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+.receipt-header p,
+.receipt-details p,
+.receipt-payment p,
+.receipt-footer p {
+  font-size: 12px;
+  margin: 2px 0;
+}
+
+.receipt-items table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.receipt-items th,
+.receipt-items td {
+  font-size: 12px;
+  text-align: left;
+  padding: 2px;
+}
+
+.receipt-total {
+  text-align: right;
+  font-weight: bold;
+}
+
+.print-button {
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Estilos para impresión */
 @media print {
-    body * {
+  body * {
       visibility: hidden;
-    }
-    
-    #modalProductos,
-    #modalProductos * {
+  }
+  .receipt, .receipt * {
       visibility: visible;
-    }
-    
-    #modalProductos {
+  }
+  .receipt {
       position: absolute;
       left: 0;
       top: 0;
-      width: 100%;
-      background: white !important;
-    }
-    
-    .no-print {
-      display: none !important;
-    }
-    
-    .print-content {
-      padding: 20px;
-      margin: 0;
-      font-size: 12pt;
-    }
-    
-    button {
-      display: none !important;
-    }
-    
-    @page {
-      margin: 0.5cm;
-      size: 80mm 297mm;
-    }
+      width: 80mm; /* Ancho típico de papel térmico */
+      border: none;
   }
+  .print-button {
+      display: none;
+  }
+  @page {
+      size: 80mm 297mm; /* Tamaño típico de papel térmico */
+      margin: 0;
+  }
+}

@@ -74,59 +74,59 @@ document.addEventListener('DOMContentLoaded', function() {
             const productos = await response.json();
             
             productosListContainer.innerHTML = `
-                <div class="text-center mb-6 print:text-sm">
-                    <h1 class="text-2xl font-bold">Sistema de Facturación S.A.S</h1>
-                    <p class="text-sm">123456789-1</p>
-                    <p class="text-sm">Calle falsa 123</p>
-                    <p class="text-sm">Manizales - Tels: / 3120000000</p>
-                    <p class="text-sm">Resolución DIAN 12345678/1234</p>
-                    <p class="text-sm">Autorizada el: ${fecha}</p>
-                    <p class="text-sm">Prefijo POS Del: 1 Al: 1000000</p>
-                    <p class="text-sm">Responsable de IVA</p>
-                </div>
-                <div class="border-t border-b border-gray-200 py-4 mb-4">
-                    <h2 class="text-xl font-semibold text-center mb-2">Factura de venta: POS - ${facturaId}</h2>
-                    <div class="grid grid-cols-2 gap-2 text-sm">
-                        <p><span class="font-semibold">Fecha:</span> ${fecha}</p>
-                        <p><span class="font-semibold">Cliente:</span> ${clienteNombre}</p>
-                        <p><span class="font-semibold">C.C / NIT:</span> 222222222-0</p>
-                        <p><span class="font-semibold">Dirección:</span> CALLE FALSA 123</p>
+                <div class="receipt">
+                    <div class="receipt-header">
+                        <h1>Sistema de Facturación S.A.S</h1>
+                        <p>NIT: 123456789-1</p>
+                        <p>Calle falsa 123</p>
+                        <p>Manizales - Tel: 3120000000</p>
+                        <p>Resolución DIAN 12345678/1234</p>
+                        <p>Autorizada el: ${fecha}</p>
+                        <p>Prefijo POS Del: 1 Al: 1000000</p>
+                        <p>Responsable de IVA</p>
                     </div>
-                </div>
-                <table class="w-full text-sm mb-4">
-                    <thead>
-                        <tr class="border-b">
-                            <th class="text-left py-2">CT</th>
-                            <th class="text-left py-2">Descripción</th>
-                            <th class="text-right py-2">Valor</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${productos.map(producto => `
-                            <tr class="border-b">
-                                <td class="py-2">${producto.cantidad}</td>
-                                <td class="py-2">${producto.nombre}</td>
-                                <td class="py-2 text-right">$${producto.precio}</td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-                <div class="border-t pt-4">
-                    <div class="flex justify-between font-bold">
-                        <span>Total:</span>
-                        <span>$${total}</span>
+                    <div class="receipt-details">
+                        <p>Factura de venta: POS - ${facturaId}</p>
+                        <p>Fecha: ${fecha}</p>
+                        <p>Cliente: ${clienteNombre}</p>
+                        <p>C.C / NIT: 222222222-0</p>
+                        <p>Dirección: CALLE FALSA 123</p>
                     </div>
-                    <div class="mt-4">
-                        <p class="text-center text-sm">Forma de Pago</p>
-                        <p class="text-center">Efectivo: $${total}</p>
-                        <p class="text-center">Cambio: $0</p>
+                    <div class="receipt-items">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>CT</th>
+                                    <th>Descripción</th>
+                                    <th>Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${productos.map(producto => `
+                                    <tr>
+                                        <td>${producto.cantidad}</td>
+                                        <td>${producto.nombre}</td>
+                                        <td>$${producto.precio}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="mt-4 text-center text-xs">
+                    <div class="receipt-total">
+                        <p><strong>Total:</strong> $${total}</p>
+                    </div>
+                    <div class="receipt-payment">
+                        <p>Forma de Pago</p>
+                        <p>Efectivo: $${total}</p>
+                        <p>Cambio: $0</p>
+                    </div>
+                    <div class="receipt-footer">
                         <p>Elaborado por: MARKSERNA/POS</p>
-                        <p>www.markserna.dev Nit:123.4568.789</p>
+                        <p>www.markserna.dev</p>
+                        <p>Nit:123.4568.789</p>
                     </div>
                 </div>
-                <div class="mt-4 flex justify-center">
+                <div class="print-button">
                     <button onclick="window.print()" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2">
                         Imprimir
                     </button>
@@ -160,6 +160,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const formattedDate = date.toISOString().split('T')[0];
         document.getElementById('fecha').value = formattedDate;
         document.getElementById('total').value = factura.total;
+        document.getElementById('total').disabled = false;
+        document.getElementById('total').parentElement.classList.remove('hidden');
         loadClientes(factura.id_cliente);
         modal.classList.remove('hidden');
     }
@@ -199,6 +201,9 @@ document.addEventListener('DOMContentLoaded', function() {
         facturaForm.reset();
         document.getElementById('facturaId').value = '';
         document.getElementById('fecha').value = getCurrentDate();
+        document.getElementById('total').value = '0';
+        document.getElementById('total').disabled = true;
+        document.getElementById('total').parentElement.classList.add('hidden');
         loadClientes();
         modal.classList.remove('hidden');
     });
@@ -212,7 +217,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const formData = new FormData(facturaForm);
         const id = document.getElementById('facturaId').value;
         formData.append('action', id ? 'update' : 'add');
-        if (id) formData.append('id', id);
+        if (id) {
+            formData.append('id', id);
+        } else {
+            formData.set('total', '0');
+        }
+
+        // Habilitar temporalmente el campo total para que se incluya en el FormData
+        document.getElementById('total').disabled = false;
 
         fetch('server_factura.php', {
             method: 'POST',
@@ -227,7 +239,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert(data.message);
             }
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => console.error('Error:', error))
+        .finally(() => {
+            // Restaurar el estado del campo total si es una nueva factura
+            if (!id) {
+                document.getElementById('total').disabled = true;
+            }
+        });
     });
 
     cancelDeleteButton.addEventListener('click', () => {
