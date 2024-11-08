@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalTitle = document.getElementById('modalTitle');
     let currentClienteId = null;
 
-    // Cargar clientes
     function loadClientes() {
         fetch('server_cliente.php', {
             method: 'POST',
@@ -47,13 +46,11 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(error => console.error('Error:', error));
     }
 
-    // Mostrar modal para crear/editar
     window.showModal = function(isEdit = false) {
         modalTitle.textContent = isEdit ? 'Editar Cliente' : 'Nuevo Cliente';
         modal.classList.remove('hidden');
     }
 
-    // Editar cliente
     window.editCliente = function(id) {
         currentClienteId = id;
         fetch('server_cliente.php', {
@@ -74,13 +71,11 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(error => console.error('Error:', error));
     }
 
-    // Mostrar modal de eliminación
     window.showDeleteModal = function(id) {
         currentClienteId = id;
         deleteModal.classList.remove('hidden');
     }
 
-    // Event Listeners
     document.getElementById('openModal').addEventListener('click', () => {
         currentClienteId = null;
         clienteForm.reset();
@@ -137,6 +132,5 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(error => console.error('Error:', error));
     });
 
-    // Cargar clientes al iniciar
     loadClientes();
 });

@@ -1,4 +1,3 @@
-// Script para abrir y cerrar el sidebar
 const sidebarButton = document.getElementById("sidebarButton");
 const sidebarContent = document.getElementById("sidebarContent");
 const closeSidebarButton = document.getElementById("closeSidebarButton");
@@ -16,3 +15,5 @@ function closeSidebar(event) {
 sidebarButton.addEventListener("click", toggleSidebar);
 closeSidebarButton.addEventListener("click", toggleSidebar);
 document.addEventListener("click", closeSidebar);
+
+document.getElementById('currentYear').textContent = new Date().getFullYear();

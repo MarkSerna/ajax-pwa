@@ -1,4 +1,3 @@
-/* Estilos para la visualización normal */
 .receipt {
   font-family: 'Courier New', Courier, monospace;
   width: 300px;
@@ -15,9 +14,9 @@
 
 .receipt-items,
 .receipt-total,
-.receipt-payment,
 .receipt-footer {
   margin-bottom: 10px;
+  text-align: center;
 }
 
 .receipt-header h1 {
@@ -57,7 +56,6 @@
   margin-top: 20px;
 }
 
-/* Estilos para impresión */
 @media print {
   body * {
       visibility: hidden;
@@ -69,14 +67,14 @@
       position: absolute;
       left: 0;
       top: 0;
-      width: 80mm; /* Ancho típico de papel térmico */
+      width: 80mm;
       border: none;
   }
   .print-button {
       display: none;
   }
   @page {
-      size: 80mm 297mm; /* Tamaño típico de papel térmico */
+      size: 80mm 297mm;
       margin: 0;
   }
 }

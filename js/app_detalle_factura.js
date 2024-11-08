@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentDetalleId = null;
     let currentFacturaId = null;
 
-    // Cargar facturas para el select
     function loadFacturas() {
         fetch('server_factura.php', {
             method: 'POST',
@@ -31,7 +30,6 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => console.error('Error:', error));
     }
 
-// Cargar detalles de factura en formato de lista
 function loadDetalles(facturaId) {
     fetch('server_detalle_factura.php', {
         method: 'POST',
@@ -42,7 +40,7 @@ function loadDetalles(facturaId) {
     })
     .then(response => response.json())
     .then(detalles => {
-        detallesList.innerHTML = ''; // Limpiar contenido anterior
+        detallesList.innerHTML = '';
         detalles.forEach(detalle => {
             const row = createDetalleRow(detalle);
             detallesList.appendChild(row);
@@ -51,14 +49,12 @@ function loadDetalles(facturaId) {
     .catch(error => console.error('Error:', error));
 }
 
-// Crear fila de detalle
 function createDetalleRow(detalle) {
     const row = document.createElement('div');
     row.className = 'flex items-center justify-between bg-white p-4 border-b border-gray-200';
 
     const totalPrecio = (detalle.cantidad * detalle.precio_unitario).toFixed(2);
 
-    // Contenido de la fila
     row.innerHTML = `
         <div>
             <p class="font-semibold">${detalle.producto_nombre}</p>
@@ -78,16 +74,12 @@ function createDetalleRow(detalle) {
             </button>
         </div>
     `;
-
-    // Agregar eventos a los botones de editar y eliminar
     row.querySelector('.edit-btn').addEventListener('click', () => openEditModal(detalle));
     row.querySelector('.delete-btn').addEventListener('click', () => openDeleteModal(detalle.id_detalle));
 
     return row;
 }
 
-
-    // Abrir modal para editar
     function openEditModal(detalle) {
         modalTitle.textContent = 'Editar Detalle';
         document.getElementById('detalleId').value = detalle.id_detalle;
@@ -98,14 +90,11 @@ function createDetalleRow(detalle) {
         modal.classList.remove('hidden');
     }
 
-    // Abrir modal para eliminar
     function openDeleteModal(id) {
         currentDetalleId = id;
         deleteModal.classList.remove('hidden');
     }
 
-    // Cargar productos para el select
-    // Cargar productos para el select
 function loadProductos() {
     fetch('server_producto.php', {
         method: 'POST',
@@ -115,19 +104,17 @@ function loadProductos() {
         body: 'action=fetch'
     })
     .then(response => {
-        // Verificamos que la respuesta es correcta antes de convertirla en JSON
         if (!response.ok) {
             throw new Error('Error en la respuesta del servidor');
         }
         return response.json();
     })
     .then(productos => {
-        console.log('Productos cargados:', productos); // Debug para verificar productos
+        console.log('Productos cargados:', productos);
 
         const productoSelect = document.getElementById('id_producto');
         productoSelect.innerHTML = '<option value="">Seleccione un producto</option>';
 
-        // Verificamos que productos tiene datos antes de intentar recorrerlo
         if (Array.isArray(productos) && productos.length > 0) {
             productos.forEach(producto => {
                 productoSelect.innerHTML += `<option value="${producto.id_producto}" data-precio="${producto.precio}">${producto.nombre}</option>`;
@@ -139,8 +126,6 @@ function loadProductos() {
     .catch(error => console.error('Error al cargar productos:', error));
 }
 
-
-    // Evento para seleccionar factura
     facturaSelect.addEventListener('change', function() {
         currentFacturaId = this.value;
         if (currentFacturaId) {
@@ -152,7 +137,6 @@ function loadProductos() {
         }
     });
 
-    // Evento para abrir modal (nuevo detalle)
     openModalButton.addEventListener('click', () => {
         modalTitle.textContent = 'Nuevo Detalle';
         detalleForm.reset();
@@ -161,12 +145,10 @@ function loadProductos() {
         loadProductos();
     });
 
-    // Evento para cerrar modal
     closeModalButton.addEventListener('click', () => {
         modal.classList.add('hidden');
     });
 
-    // Evento para calcular subtotal
     document.getElementById('cantidad').addEventListener('input', calcularSubtotal);
     document.getElementById('id_producto').addEventListener('change', calcularSubtotal);
 
@@ -180,7 +162,6 @@ function loadProductos() {
         document.getElementById('subtotal').value = (cantidad * precio).toFixed(2);
     }
 
-    // Evento para enviar formulario
     detalleForm.addEventListener('submit', function(e) {
         e.preventDefault();
         const formData = new FormData(detalleForm);
@@ -205,12 +186,10 @@ function loadProductos() {
         .catch(error => console.error('Error:', error));
     });
 
-    // Evento para cancelar eliminación
     cancelDeleteButton.addEventListener('click', () => {
         deleteModal.classList.add('hidden');
     });
 
-    // Evento para confirmar eliminación
     confirmDeleteButton.addEventListener('click', () => {
         if (currentDetalleId) {
             fetch('server_detalle_factura.php', {
@@ -233,6 +212,5 @@ function loadProductos() {
         }
     });
 
-    // Cargar facturas al iniciar
     loadFacturas();
 });

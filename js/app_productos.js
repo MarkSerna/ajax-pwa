@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const confirmDeleteButton = document.getElementById('confirmDelete');
     let currentProductoId = null;
 
-    // Cargar productos
 function loadProductos() {
     fetch('server_producto.php', {
         method: 'POST',
@@ -21,7 +20,7 @@ function loadProductos() {
     })
     .then(response => response.json())
     .then(productos => {
-        productosList.innerHTML = ''; // Limpiar contenido anterior
+        productosList.innerHTML = '';
         productos.forEach(producto => {
             const row = createProductoRow(producto);
             productosList.appendChild(row);
@@ -30,12 +29,10 @@ function loadProductos() {
     .catch(error => console.error('Error:', error));
 }
 
-    // Crear fila de producto
 function createProductoRow(producto) {
     const row = document.createElement('div');
     row.className = 'flex items-center justify-between bg-white p-4 border-b border-gray-200';
 
-    // Contenido de la fila
     row.innerHTML = `
         <div>
             <p class="font-semibold">${producto.nombre}</p>
@@ -57,15 +54,12 @@ function createProductoRow(producto) {
         </div>
     `;
 
-    // Agregar eventos a los botones de editar y eliminar
     row.querySelector('.edit-btn').addEventListener('click', () => openEditModal(producto));
     row.querySelector('.delete-btn').addEventListener('click', () => openDeleteModal(producto.id_producto));
 
     return row;
 }
 
-
-    // Abrir modal para editar
     function openEditModal(producto) {
         modalTitle.textContent = 'Editar Producto';
         document.getElementById('productoId').value = producto.id_producto;
@@ -76,13 +70,11 @@ function createProductoRow(producto) {
         modal.classList.remove('hidden');
     }
 
-    // Abrir modal para eliminar
     function openDeleteModal(id) {
         currentProductoId = id;
         deleteModal.classList.remove('hidden');
     }
 
-    // Evento para abrir modal (nuevo producto)
     openModalButton.addEventListener('click', () => {
         modalTitle.textContent = 'Nuevo Producto';
         productoForm.reset();
@@ -90,12 +82,10 @@ function createProductoRow(producto) {
         modal.classList.remove('hidden');
     });
 
-    // Evento para cerrar modal
     closeModalButton.addEventListener('click', () => {
         modal.classList.add('hidden');
     });
 
-    // Evento para enviar formulario
     productoForm.addEventListener('submit', function(e) {
         e.preventDefault();
         const formData = new FormData(productoForm);
@@ -119,12 +109,10 @@ function createProductoRow(producto) {
         .catch(error => console.error('Error:', error));
     });
 
-    // Evento para cancelar eliminación
     cancelDeleteButton.addEventListener('click', () => {
         deleteModal.classList.add('hidden');
     });
 
-    // Evento para confirmar eliminación
     confirmDeleteButton.addEventListener('click', () => {
         if (currentProductoId) {
             fetch('server_producto.php', {
@@ -147,6 +135,5 @@ function createProductoRow(producto) {
         }
     });
 
-    // Cargar productos al iniciar
     loadProductos();
 });

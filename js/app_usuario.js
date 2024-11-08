@@ -1,4 +1,3 @@
-// Obtener referencias a los elementos del modal
 const modal = document.getElementById("modal");
 const openModal = document.getElementById("openModal");
 const closeModal = document.getElementById("closeModal");
@@ -10,7 +9,6 @@ const modalEliminar = document.getElementById("modalEliminar");
 const btnEliminar = document.getElementById("btnEliminar");
 let currentId = null;
 
-// Funciones de apertura y cierre del modal
 function abrirModal() {
     modal.classList.remove("hidden");
     modal.classList.add("active");
@@ -24,7 +22,6 @@ function cerrarModal() {
     currentId = null;
 }
 
-// Event Listeners para abrir y cerrar el modal
 openModal.addEventListener("click", abrirModal);
 closeModal.addEventListener("click", cerrarModal);
 
@@ -32,7 +29,6 @@ modal.addEventListener("click", (event) => {
     if (event.target === modal) cerrarModal();
 });
 
-// Mostrar mensaje de éxito y cerrar modal automáticamente
 function showModalExito(message) {
     mensajeExito.textContent = message;
     modalExito.classList.remove("hidden");
@@ -42,7 +38,6 @@ function showModalExito(message) {
     }, 3000);
 }
 
-// Función para obtener datos de los usuarios
 async function fetchUsers() {
     try {
         const response = await fetch("server_usuario.php", {
@@ -73,7 +68,6 @@ async function fetchUsers() {
     }
 }
 
-// Función para cargar datos de un usuario y abrir el modal en modo edición
 async function editUser(id) {
     try {
         const formData = new FormData();
@@ -105,7 +99,6 @@ async function editUser(id) {
     }
 }
 
-// Función para agregar o actualizar un usuario
 dataForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     const formData = new FormData(dataForm);
@@ -132,13 +125,11 @@ dataForm.addEventListener("submit", async (event) => {
     }
 });
 
-// Función para mostrar el modal de confirmación de eliminación
 function confirmDelete(id) {
     currentId = id;
     modalEliminar.classList.remove("hidden");
 }
 
-// Confirmar eliminación del usuario
 btnEliminar.addEventListener("click", async () => {
     try {
         const formData = new FormData();
@@ -162,10 +153,8 @@ btnEliminar.addEventListener("click", async () => {
     }
 });
 
-// Cancelar eliminación
 document.getElementById("btnCancelar").addEventListener("click", () => {
     modalEliminar.classList.add("hidden");
 });
 
-// Cargar usuarios al cargar la página
 document.addEventListener("DOMContentLoaded", fetchUsers);

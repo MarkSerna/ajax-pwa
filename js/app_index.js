@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const mainContent = document.getElementById('mainContent');
 
-    // Función para crear una tarjeta
     function createCard(title, value, icon, link) {
         const card = document.createElement('a');
         card.href = link;
@@ -18,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return card;
     }
 
-    // Función para cargar los datos y crear las tarjetas
     function loadDashboardData() {
         Promise.all([
             fetch('server_cliente.php', {
@@ -51,6 +49,5 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Cargar los datos del dashboard
     loadDashboardData();
 });

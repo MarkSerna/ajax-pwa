@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <table>
                             <thead>
                                 <tr>
-                                    <th>CT</th>
+                                    <th>Cant</th>
                                     <th>Descripción</th>
                                     <th>Valor</th>
                                 </tr>
@@ -223,7 +223,6 @@ document.addEventListener('DOMContentLoaded', function() {
             formData.set('total', '0');
         }
 
-        // Habilitar temporalmente el campo total para que se incluya en el FormData
         document.getElementById('total').disabled = false;
 
         fetch('server_factura.php', {
@@ -241,7 +240,6 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => console.error('Error:', error))
         .finally(() => {
-            // Restaurar el estado del campo total si es una nueva factura
             if (!id) {
                 document.getElementById('total').disabled = true;
             }

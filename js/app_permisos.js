@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let currentPermisoId = null;
 
-    // Cargar permisos
     function loadPermisos() {
         fetch('server_permisos_usuario.php', {
             method: 'POST',
@@ -34,7 +33,6 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => console.error('Error:', error));
     }
 
-    // Crear tarjeta de permiso
     function createPermisoCard(permiso) {
         const card = document.createElement('div');
         card.className = 'bg-white rounded-lg shadow-md p-6 mb-4';
@@ -53,7 +51,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return card;
     }
 
-    // Abrir modal para editar
     function openEditModal(permiso) {
         modalTitle.textContent = 'Editar Permiso';
         document.getElementById('permisoId').value = permiso.id_permiso;
@@ -62,13 +59,11 @@ document.addEventListener('DOMContentLoaded', function() {
         modal.classList.remove('hidden');
     }
 
-    // Abrir modal para eliminar
     function openDeleteModal(id) {
         currentPermisoId = id;
         deleteModal.classList.remove('hidden');
     }
 
-    // Cargar usuarios para el select
     function loadUsuarios() {
         fetch('server_usuario.php', {
             method: 'POST',
@@ -88,28 +83,24 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => console.error('Error:', error));
     }
 
-    // Evento para abrir modal (nuevo permiso)
     openModalButton.addEventListener('click', () => {
         modalTitle.textContent = 'Nuevo Permiso';
         permisoForm.reset();
         document.getElementById('permisoId').value = '';
-        document.getElementById('permiso').value = 'viewer'; // Establecer el permiso predeterminado a "visualizador"
+        document.getElementById('permiso').value = 'viewer';
         modal.classList.remove('hidden');
         loadUsuarios();
     });
 
-    // Evento para cerrar modal
     closeModalButton.addEventListener('click', () => {
         modal.classList.add('hidden');
     });
 
-    // Evento para enviar formulario
     permisoForm.addEventListener('submit', function(e) {
         e.preventDefault();
         const formData = new FormData(permisoForm);
         const id = document.getElementById('permisoId').value;
-    
-        // Establecer permiso a "viewer" si es una creación de nuevo usuario
+
         if (!id) {
             formData.set('permiso', 'viewer');
         }
@@ -128,7 +119,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 loadPermisos();
             } else {
                 if (data.message === 'El usuario ya tiene un permiso asignado.') {
-                    // Mostrar el modal de advertencia si ya tiene permiso
                     duplicatePermissionModal.classList.remove('hidden');
                 } else {
                     alert(data.message);
@@ -145,14 +135,11 @@ document.addEventListener('DOMContentLoaded', function() {
     acceptDuplicatePermission.addEventListener('click', () => {
         duplicatePermissionModal.classList.add('hidden');
     });
-    
 
-    // Evento para cancelar eliminación
     cancelDeleteButton.addEventListener('click', () => {
         deleteModal.classList.add('hidden');
     });
 
-    // Evento para confirmar eliminación
     confirmDeleteButton.addEventListener('click', () => {
         if (currentPermisoId) {
             fetch('server_permisos_usuario.php', {
@@ -175,6 +162,5 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Cargar permisos al iniciar
     loadPermisos();
 });
