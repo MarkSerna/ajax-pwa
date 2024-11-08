@@ -1,0 +1,37 @@
+@media print {
+    body * {
+      visibility: hidden;
+    }
+    
+    #modalProductos,
+    #modalProductos * {
+      visibility: visible;
+    }
+    
+    #modalProductos {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      background: white !important;
+    }
+    
+    .no-print {
+      display: none !important;
+    }
+    
+    .print-content {
+      padding: 20px;
+      margin: 0;
+      font-size: 12pt;
+    }
+    
+    button {
+      display: none !important;
+    }
+    
+    @page {
+      margin: 0.5cm;
+      size: 80mm 297mm;
+    }
+  }

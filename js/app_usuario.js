@@ -12,6 +12,7 @@ let currentId = null;
 
 // Funciones de apertura y cierre del modal
 function abrirModal() {
+    modal.classList.remove("hidden");
     modal.classList.add("active");
     dataForm.reset();
     document.getElementById("id").value = '';
@@ -19,6 +20,8 @@ function abrirModal() {
 
 function cerrarModal() {
     modal.classList.remove("active");
+    modal.classList.add("hidden");
+    currentId = null;
 }
 
 // Event Listeners para abrir y cerrar el modal
@@ -73,20 +76,26 @@ async function fetchUsers() {
 // Función para cargar datos de un usuario y abrir el modal en modo edición
 async function editUser(id) {
     try {
+        const formData = new FormData();
+        formData.append('action', 'fetch');
+        formData.append('id', id);
+
         const response = await fetch("server_usuario.php", {
             method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: `action=fetch&id=${id}`,
+            body: formData
         });
+        
         const user = await response.json();
 
-        if (user) {
+        if (user && user.id) {
+            document.getElementById("id").value = user.id;
             document.getElementById("nombre").value = user.nombre;
             document.getElementById("email").value = user.email;
             document.getElementById("telefono").value = user.telefono;
             document.getElementById("contrasenia").value = user.password;
             currentId = id;
-            abrirModal();
+            modal.classList.remove("hidden");
+            modal.classList.add("active");
         } else {
             showModalExito("Error al cargar los datos del usuario.");
         }
@@ -132,10 +141,13 @@ function confirmDelete(id) {
 // Confirmar eliminación del usuario
 btnEliminar.addEventListener("click", async () => {
     try {
+        const formData = new FormData();
+        formData.append('action', 'delete');
+        formData.append('id', currentId);
+
         const response = await fetch("server_usuario.php", {
             method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: `action=delete&id=${currentId}`,
+            body: formData
         });
         const data = await response.json();
         
