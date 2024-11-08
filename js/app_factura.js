@@ -60,6 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         return card;
     }
+    
 
     window.showProductos = async function(facturaId, clienteNombre, fecha, total) {
         try {

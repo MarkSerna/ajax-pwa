@@ -11,45 +11,59 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentProductoId = null;
 
     // Cargar productos
-    function loadProductos() {
-        fetch('server_producto.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'action=fetch'
-        })
-        .then(response => response.json())
-        .then(productos => {
-            productosList.innerHTML = '';
-            productos.forEach(producto => {
-                const card = createProductoCard(producto);
-                productosList.appendChild(card);
-            });
-        })
-        .catch(error => console.error('Error:', error));
-    }
+function loadProductos() {
+    fetch('server_producto.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'action=fetch'
+    })
+    .then(response => response.json())
+    .then(productos => {
+        productosList.innerHTML = ''; // Limpiar contenido anterior
+        productos.forEach(producto => {
+            const row = createProductoRow(producto);
+            productosList.appendChild(row);
+        });
+    })
+    .catch(error => console.error('Error:', error));
+}
 
-    // Crear tarjeta de producto
-    function createProductoCard(producto) {
-        const card = document.createElement('div');
-        card.className = 'bg-white rounded-lg shadow-md p-6';
-        card.innerHTML = `
-            <h3 class="text-xl font-semibold mb-2">${producto.nombre}</h3>
-            <p class="text-gray-600 mb-4">${producto.descripcion}</p>
-            <p class="text-lg font-bold mb-2">Precio: $${producto.precio}</p>
-            <p class="text-md mb-4">Stock: ${producto.stock}</p>
-            <div class="flex justify-end space-x-2">
-                <button class="edit-btn px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Editar</button>
-                <button class="delete-btn px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Eliminar</button>
-            </div>
-        `;
+    // Crear fila de producto
+function createProductoRow(producto) {
+    const row = document.createElement('div');
+    row.className = 'flex items-center justify-between bg-white p-4 border-b border-gray-200';
 
-        card.querySelector('.edit-btn').addEventListener('click', () => openEditModal(producto));
-        card.querySelector('.delete-btn').addEventListener('click', () => openDeleteModal(producto.id_producto));
+    // Contenido de la fila
+    row.innerHTML = `
+        <div>
+            <p class="font-semibold">${producto.nombre}</p>
+            <p class="text-sm text-gray-600">Descripción: ${producto.descripcion}</p>
+            <p class="text-sm text-gray-600">Precio: $${producto.precio} | Stock: ${producto.stock}</p>
+        </div>
+        <div class="flex space-x-2">
+            <button class="edit-btn bg-blue-500 text-white rounded p-2 hover:bg-blue-700" title="Editar">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="m7 17.013l4.413-.015l9.632-9.54c.378-.378.586-.88.586-1.414s-.208-1.036-.586-1.414l-1.586-1.586c-.756-.756-2.075-.752-2.825-.003L7 12.583zM18.045 4.458l1.589 1.583l-1.597 1.582l-1.586-1.585zM9 13.417l6.03-5.973l1.586 1.586l-6.029 5.971L9 15.006z"/>
+                    <path d="M5 21h14c1.103 0 2-.897 2-2v-8.668l-2 2V19H8.158c-.026 0-.053.01-.079.01c-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2"/>
+                </svg>
+            </button>
+            <button class="delete-btn bg-red-500 text-white rounded p-2 hover:bg-red-700" title="Eliminar">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 11v6m-4-6v6M6 7v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7M4 7h16M7 7l2-4h6l2 4"/>
+                </svg>
+            </button>
+        </div>
+    `;
 
-        return card;
-    }
+    // Agregar eventos a los botones de editar y eliminar
+    row.querySelector('.edit-btn').addEventListener('click', () => openEditModal(producto));
+    row.querySelector('.delete-btn').addEventListener('click', () => openDeleteModal(producto.id_producto));
+
+    return row;
+}
+
 
     // Abrir modal para editar
     function openEditModal(producto) {

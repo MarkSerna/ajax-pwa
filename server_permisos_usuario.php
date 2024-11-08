@@ -13,8 +13,17 @@ try {
     switch ($action) {
         case 'add':
             $id_usuario = $_POST['id_usuario'];
-            $permiso = $_POST['permiso'];
+            $permiso = $_POST['permiso'] ?? 'viewer'; // Asignar "visualizador" por defecto
 
+            // Verificar si el usuario ya tiene un permiso asignado
+            $stmt = $pdo->prepare("SELECT * FROM permisos_usuario WHERE id_usuario = ?");
+            $stmt->execute([$id_usuario]);
+            if ($stmt->rowCount() > 0) {
+                echo json_encode(['success' => false, 'message' => 'El usuario ya tiene un permiso asignado.']);
+                exit;
+            }
+
+            // Si no tiene permiso, proceder con la inserción
             $stmt = $pdo->prepare("INSERT INTO permisos_usuario (id_usuario, permiso) VALUES (?, ?)");
             $stmt->execute([$id_usuario, $permiso]);
             echo json_encode(['success' => true, 'message' => 'Permiso agregado con éxito.']);

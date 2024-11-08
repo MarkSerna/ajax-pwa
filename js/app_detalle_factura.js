@@ -31,46 +31,61 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => console.error('Error:', error));
     }
 
-    // Cargar detalles de factura
-    function loadDetalles(facturaId) {
-        fetch('server_detalle_factura.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `action=fetch&id_factura=${facturaId}`
-        })
-        .then(response => response.json())
-        .then(detalles => {
-            detallesList.innerHTML = '';
-            detalles.forEach(detalle => {
-                const card = createDetalleCard(detalle);
-                detallesList.appendChild(card);
-            });
-        })
-        .catch(error => console.error('Error:', error));
-    }
+// Cargar detalles de factura en formato de lista
+function loadDetalles(facturaId) {
+    fetch('server_detalle_factura.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `action=fetch&id_factura=${facturaId}`
+    })
+    .then(response => response.json())
+    .then(detalles => {
+        detallesList.innerHTML = ''; // Limpiar contenido anterior
+        detalles.forEach(detalle => {
+            const row = createDetalleRow(detalle);
+            detallesList.appendChild(row);
+        });
+    })
+    .catch(error => console.error('Error:', error));
+}
 
-    // Crear tarjeta de detalle
-    function createDetalleCard(detalle) {
-        const card = document.createElement('div');
-        card.className = 'bg-white rounded-lg shadow-md p-6 mb-4';
-        card.innerHTML = `
-            <h3 class="text-xl font-semibold mb-2">${detalle.producto_nombre}</h3>
-            <p class="text-gray-600 mb-2">Cantidad: ${detalle.cantidad}</p>
-            <p class="text-gray-600 mb-2">Precio Unitario: $${detalle.precio_unitario}</p>
-            <p class="text-lg font-bold mb-4">Subtotal: $${(detalle.cantidad * detalle.precio_unitario).toFixed(2)}</p>
-            <div class="flex justify-end space-x-2">
-                <button class="edit-btn px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Editar</button>
-                <button class="delete-btn px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Eliminar</button>
-            </div>
-        `;
+// Crear fila de detalle
+function createDetalleRow(detalle) {
+    const row = document.createElement('div');
+    row.className = 'flex items-center justify-between bg-white p-4 border-b border-gray-200';
 
-        card.querySelector('.edit-btn').addEventListener('click', () => openEditModal(detalle));
-        card.querySelector('.delete-btn').addEventListener('click', () => openDeleteModal(detalle.id_detalle));
+    const totalPrecio = (detalle.cantidad * detalle.precio_unitario).toFixed(2);
 
-        return card;
-    }
+    // Contenido de la fila
+    row.innerHTML = `
+        <div>
+            <p class="font-semibold">${detalle.producto_nombre}</p>
+            <p class="text-sm text-gray-600">Cantidad: ${detalle.cantidad}, Total: $${totalPrecio}</p>
+        </div>
+        <div class="flex space-x-2">
+            <button class="edit-btn bg-blue-500 text-white rounded p-2 hover:bg-blue-700" title="Editar">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="m7 17.013l4.413-.015l9.632-9.54c.378-.378.586-.88.586-1.414s-.208-1.036-.586-1.414l-1.586-1.586c-.756-.756-2.075-.752-2.825-.003L7 12.583zM18.045 4.458l1.589 1.583l-1.597 1.582l-1.586-1.585zM9 13.417l6.03-5.973l1.586 1.586l-6.029 5.971L9 15.006z"/>
+                    <path d="M5 21h14c1.103 0 2-.897 2-2v-8.668l-2 2V19H8.158c-.026 0-.053.01-.079.01c-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2"/>
+                </svg>
+            </button>
+            <button class="delete-btn bg-red-500 text-white rounded p-2 hover:bg-blue-700" title="Eliminar">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                    <path fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 11v6m-4-6v6M6 7v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7M4 7h16M7 7l2-4h6l2 4"/>
+                </svg>
+            </button>
+        </div>
+    `;
+
+    // Agregar eventos a los botones de editar y eliminar
+    row.querySelector('.edit-btn').addEventListener('click', () => openEditModal(detalle));
+    row.querySelector('.delete-btn').addEventListener('click', () => openDeleteModal(detalle.id_detalle));
+
+    return row;
+}
+
 
     // Abrir modal para editar
     function openEditModal(detalle) {
@@ -90,24 +105,40 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Cargar productos para el select
-    function loadProductos() {
-        fetch('server_producto.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'action=fetch'
-        })
-        .then(response => response.json())
-        .then(productos => {
-            const productoSelect = document.getElementById('id_producto');
-            productoSelect.innerHTML = '<option value="">Seleccione un producto</option>';
+    // Cargar productos para el select
+function loadProductos() {
+    fetch('server_producto.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'action=fetch'
+    })
+    .then(response => {
+        // Verificamos que la respuesta es correcta antes de convertirla en JSON
+        if (!response.ok) {
+            throw new Error('Error en la respuesta del servidor');
+        }
+        return response.json();
+    })
+    .then(productos => {
+        console.log('Productos cargados:', productos); // Debug para verificar productos
+
+        const productoSelect = document.getElementById('id_producto');
+        productoSelect.innerHTML = '<option value="">Seleccione un producto</option>';
+
+        // Verificamos que productos tiene datos antes de intentar recorrerlo
+        if (Array.isArray(productos) && productos.length > 0) {
             productos.forEach(producto => {
                 productoSelect.innerHTML += `<option value="${producto.id_producto}" data-precio="${producto.precio}">${producto.nombre}</option>`;
             });
-        })
-        .catch(error => console.error('Error:', error));
-    }
+        } else {
+            productoSelect.innerHTML = '<option value="">No hay productos disponibles</option>';
+        }
+    })
+    .catch(error => console.error('Error al cargar productos:', error));
+}
+
 
     // Evento para seleccionar factura
     facturaSelect.addEventListener('change', function() {

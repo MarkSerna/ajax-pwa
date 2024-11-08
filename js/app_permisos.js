@@ -8,6 +8,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const deleteModal = document.getElementById('deleteModal');
     const cancelDeleteButton = document.getElementById('cancelDelete');
     const confirmDeleteButton = document.getElementById('confirmDelete');
+    const duplicatePermissionModal = document.getElementById('duplicatePermissionModal');
+    const cancelDuplicatePermission = document.getElementById('cancelDuplicatePermission');
+    const acceptDuplicatePermission = document.getElementById('acceptDuplicatePermission');
+
     let currentPermisoId = null;
 
     // Cargar permisos
@@ -89,6 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
         modalTitle.textContent = 'Nuevo Permiso';
         permisoForm.reset();
         document.getElementById('permisoId').value = '';
+        document.getElementById('permiso').value = 'viewer'; // Establecer el permiso predeterminado a "visualizador"
         modal.classList.remove('hidden');
         loadUsuarios();
     });
@@ -103,9 +108,15 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         const formData = new FormData(permisoForm);
         const id = document.getElementById('permisoId').value;
+    
+        // Establecer permiso a "viewer" si es una creación de nuevo usuario
+        if (!id) {
+            formData.set('permiso', 'viewer');
+        }
+    
         formData.append('action', id ? 'update' : 'add');
         if (id) formData.append('id', id);
-
+    
         fetch('server_permisos_usuario.php', {
             method: 'POST',
             body: formData
@@ -116,11 +127,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 modal.classList.add('hidden');
                 loadPermisos();
             } else {
-                alert(data.message);
+                if (data.message === 'El usuario ya tiene un permiso asignado.') {
+                    // Mostrar el modal de advertencia si ya tiene permiso
+                    duplicatePermissionModal.classList.remove('hidden');
+                } else {
+                    alert(data.message);
+                }
             }
         })
         .catch(error => console.error('Error:', error));
     });
+
+    cancelDuplicatePermission.addEventListener('click', () => {
+        duplicatePermissionModal.classList.add('hidden');
+    });
+    
+    acceptDuplicatePermission.addEventListener('click', () => {
+        duplicatePermissionModal.classList.add('hidden');
+    });
+    
 
     // Evento para cancelar eliminación
     cancelDeleteButton.addEventListener('click', () => {
